@@ -1,0 +1,78 @@
+.button {
+    padding: 0.5rem;
+    border-radius: 50%;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--text);
+  }
+  
+  .button:hover {
+    background: rgba(0,0,0,0.1);
+  }
+  
+  .icon {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+  .toggleContainer {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 30px;
+  }
+  
+  .toggleInput {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  .toggleSlider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, #6b7280 0%, #9ca3af 100%);
+    transition: .4s;
+    border-radius: 34px;
+  }
+  
+  .toggleSlider:before {
+    position: absolute;
+    content: "";
+    height: 22px;
+    width: 22px;
+    left: 4px;
+    bottom: 4px;
+    background: white;
+    transition: .4s;
+    border-radius: 50%;
+  }
+  
+  .toggleInput:checked + .toggleSlider {
+    background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+  }
+  
+  .toggleInput:checked + .toggleSlider:before {
+    transform: translateX(30px);
+  }
+  
+  .toggleIcons {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+  
+  .sunIcon {
+    left: 8px;
+    color: white;
+  }
+  
+  .moonIcon {
+    right: 8px;
+    color: #1f2937;
+  }
