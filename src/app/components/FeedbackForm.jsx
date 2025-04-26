@@ -25,32 +25,33 @@ export default function FeedbackForm() {
     return newErrors;
   };
 
-  const handleSubmit = async (e) => {
+  // src/app/components/FeedbackForm.jsx
+const handleSubmit = async (e) => {
     e.preventDefault();
-    const validationErrors = validate();
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
+    
+    // Add client-side validation if needed
+    if (!formData.name || !formData.email || !formData.message) {
+      setErrors({ submit: 'All fields are required' });
       return;
     }
-
-    setIsSubmitting(true);
+  
     try {
-      const response = await fetch('/api/submit-feedback', {
+      const submitResponse = await fetch('/.netlify/functions/submit-feedback', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(formData)
       });
-
-      if (response.ok) {
-        setFormData({ name: '', email: '', message: '' });
-        setErrors({});
-        setSubmitSuccess(true);
-        setTimeout(() => setSubmitSuccess(false), 3000);
+  
+      if (!submitResponse.ok) {
+        const errorData = await submitResponse.json();
+        throw new Error(errorData.error || 'Submission failed');
       }
+  
+      // Success handling
+      setSubmitSuccess(true);
+      setFormData({ name: '', email: '', message: '' }); // Reset form
     } catch (error) {
-      console.error('Error:', error);
-    } finally {
-      setIsSubmitting(false);
+      setErrors({ submit: error.message });
     }
   };
 

@@ -9,16 +9,23 @@ export default function FeedbackList() {
   const [error, setError] = useState(null);
   const [showFeedback, setShowFeedback] = useState(false);
 
+  // src/app/components/FeedbackList.jsx
   const fetchFeedbacks = async () => {
     setIsLoading(true);
     setError(null);
+    
     try {
-      const response = await fetch('/api/feedbacks');
-      if (!response.ok) throw new Error('Failed to fetch feedbacks');
+      const response = await fetch('/.netlify/functions/feedbacks');
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
       const data = await response.json();
       setFeedbacks(data);
     } catch (err) {
-      setError(err.message);
+      console.error('Fetch error:', err);
+      setError('Failed to load feedbacks. Please try again later.');
     } finally {
       setIsLoading(false);
     }
