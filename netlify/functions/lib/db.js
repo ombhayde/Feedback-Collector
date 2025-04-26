@@ -1,40 +1,37 @@
-const fs = require('fs');
-const path = require('path');
-const os = require('os');
+// netlify/functions/lib/db.js
+const { createClient } = require('@supabase/supabase-js');
 
-// Cross-platform temp directory
-const tempDir = os.tmpdir();
-const dataPath = path.join(tempDir, 'feedbacks.json');
-
-// Create file if it doesn't exist
-if (!fs.existsSync(dataPath)) {
-  fs.writeFileSync(dataPath, '[]', 'utf8');
-}
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_ANON_KEY
+);
 
 module.exports = {
-  getFeedbacks: () => {
-    try {
-      const data = fs.readFileSync(dataPath, 'utf8');
-      return JSON.parse(data);
-    } catch (err) {
-      console.error('Read error:', err);
+  getFeedbacks: async () => {
+    const { data, error } = await supabase
+      .from('feedbacks')
+      .select('*')
+      .order('created_at', { ascending: false });
+    
+    if (error) {
+      console.error('Supabase read error:', error);
       return [];
     }
+    return data;
   },
-
-  saveFeedback: (feedback) => {
-    try {
-      const feedbacks = module.exports.getFeedbacks();
-      const newFeedback = {
-        ...feedback,
-        id: Date.now().toString(),
-        timestamp: new Date().toISOString()
-      };
-      fs.writeFileSync(dataPath, JSON.stringify([...feedbacks, newFeedback], null, 2));
-      return true;
-    } catch (err) {
-      console.error('Write error:', err);
-      throw err;
+  
+  saveFeedback: async (feedback) => {
+    const { error } = await supabase
+      .from('feedbacks')
+      .insert({
+        name: feedback.name,
+        email: feedback.email,
+        message: feedback.message
+      });
+    
+    if (error) {
+      console.error('Supabase write error:', error);
+      throw error;
     }
   }
 };
