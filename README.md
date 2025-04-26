@@ -1,37 +1,60 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+markdown
+# Feedback Collector
 
-## Getting Started
+## Project Overview
+A single-page application for collecting and viewing user feedback with:
+- Form validation
+- Admin view toggle
+- Dark/light theme
+- Responsive design
 
-First, run the development server:
+## Tech Stack
+- Frontend: Next.js 14, CSS Modules
+- Backend: Next.js API Routes (Netlify Functions)
+- Database: JSON file storage
+- Hosting: Netlify
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Project Structure
+/src
+/app
+/api # API endpoints
+/components # React components
+/lib # Database utilities
+page.js # Main page
+/public
+/data # JSON data storage
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Key Files Explained
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+1. **Frontend Components** (`/app/components`)
+   - `FeedbackForm`: Handles user input with validation
+   - `FeedbackList`: Displays submitted feedbacks (admin view)
+   - `ThemeToggle`: Dark/light mode switcher
+   - `Watermark`: Footer attribution
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+2. **API Endpoints** (`/app/api`)
+   - `submit-feedback`: Processes form submissions
+   - `feedbacks`: Returns all stored feedbacks
 
-## Learn More
+3. **Core Infrastructure**
+   - `db.js`: Manages JSON file read/write operations
+   - `globals.css`: CSS variables for theming
+   - `feedbacks.json`: Persistent data storage
 
-To learn more about Next.js, take a look at the following resources:
+4. **Configuration**
+   - `netlify.toml`: Deployment settings for Netlify
+   - `package.json`: Project metadata and scripts
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Data Flow
+1. User submits form → `POST /api/submit-feedback`
+2. Admin views feedbacks → `GET /api/feedbacks`
+3. All data persists in `public/data/feedbacks.json`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-# Feedback-Collector
+## Deployment Steps
+1. Clone repository
+2. Install dependencies: `npm install`
+3. Run locally: `npm run dev`
+4. Deploy to Netlify:
+   - Connect GitHub repo
+   - Set build command: `npm run build`
+   - Set publish directory: `.next/static`
